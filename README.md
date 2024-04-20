@@ -76,62 +76,91 @@ Read more about building Discord Activities with the Embedded App SDK at [https:
   npm -v # should print `10.2.4`
   ```
 
-### Run client side app
+### Install pnpm
 
-1. Follow below command to launch app
+* According to Dicord official examples, we choose `pnpm` instead of `npm`.
+* You can also install pnpm by npm. [pnpm official link](https://pnpm.io/installation)
 
-    ```shell
-    cd client
+* Windows
+  * Install by Powershell
 
-    # install needed packages
-    npm install
+  ```shell
+  iwr https://get.pnpm.io/install.ps1 -useb | iex
+  ```
 
-    # install discord SDK if it does not be auto installed by above command
-    npm install @discord/embedded-app-sdk
+* Linux
+  * Install by curl
 
-    # launch client app
-    npm run dev
+  ```shell
+  curl -fsSL https://get.pnpm.io/install.sh | sh -
+  ```
 
-    # Output
-    #  ➜  Local:   http://localhost:5173/
-    #  ➜  Network: use --host to expose
-    #  ➜  press h + enter to show help
-    ```
+### Run app
 
-2. Make sure can access your app by port 5173 on Internet
+* You can run both client and server side or run them individualy.
+
+#### Install necessary packages
+
+* Only need do once.
+
+```shell
+# install packages in root folder
+pnpm install
+
+# install pacakges needed by client app
+# If it can find discord-sdk version when installing, you can use `yarn` to choose the version of discord-sdk to install.
+cd packages/client
+pnpm install
+
+# install pacakges needed by server app
+# If it can find discord-sdk version when installing, you can use `yarn` to choose the version of discord-sdk to install.
+cd packages/server
+pnpm install
+```
+
+#### Prepare environment
+
+1. Make sure can access your app by port `3000` and `13001` on Internet
     * Some recommend methods
         * Have a domain name can be accessed
         * Use Cloudflared to create a network tunnel [Tutorial](https://medium.com/@zetavg/%E4%BD%BF%E7%94%A8-cloudflare-tunnel-%E4%BD%9C%E7%82%BA%E4%BD%8E%E6%88%90%E6%9C%AC%E7%9A%84-ngrok-%E6%9B%BF%E4%BB%A3%E5%93%81-6b0aaef97557)
-            * `cloudflared tunnel --url http://localhost:5173`
+            * Client app entrypoint: `cloudflared tunnel --url http://localhost:3000`
+            * Server app entrypoint: `cloudflared tunnel --url http://localhost:13001`
 
-3. Set URL mappings
-    * Set `root mapping` as `/`
-    * Set `target` as the access address in step 2.
+2. Set URL mappings
+    * Set `root mapping` as `/` like the orange box. It is used to connect the Discord OAuth2 service (port:3001).
+    * Set `colyseus mapping` as `/colyseus` and `/colyseus/matchmake/joinOrCreate/game` link in the red box. It is used to connect the colyseus service in server app from client app.
+    * Because there is a strict CSP limitation when client app run on Discord Activity. You can not directly connect like `https://localhost:13001`. You can only connect `https://{CLIENT_ID}.discordsays.com`. Therefore, we need to add the url mapping to server app.
 
-    ![url-mappings](docs/images/url-mappings.png)
+    ![url-mappings](docs/images/url-mappings-2.png)
 
-4. Enable Discord Developer Mode
+3. Enable Discord Developer Mode
     * Go to your User Settings -> Advanced and toggle on the Developer Mode setting
     * You need to enable it or you can not find the application in activites the Rocket icon 🚀
 
     ![dedeveloped-mode](docs/images/developed-mode.png)
 
-### Run server side app
+#### Run both client & server app
 
-1. Follow below command to launch app
+```shell
+npm dev
+# Output
+#  packages/client dev:   vite v2.9.18 dev server running at:
+#  packages/client dev:   > Local: http://localhost:3000/
+#  packages/server dev: App is listening on ws://localhost:13001
+```
 
-    ```shell
-    cd server
+#### Run client app
 
-    # install needed packages
-    npm install
+```shell
+npm dev
+```
 
-    # launch client app
-    npm run dev
+#### Run server app
 
-    # Output
-    #  Server listening at http://localhost:3001
-    ```
+```shell
+npm dev
+```
 
 ### Run Activity in Discord
 
