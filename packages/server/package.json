@@ -1,0 +1,46 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "description": "The app server",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm-run-all build start:prod",
+    "start:prod": "NODE_ENV=production node ./dist/app.js",
+    "dev": "nodemon --watch src -e ts,ejs --exec $npm_execpath start",
+    "build": "npm-run-all build:clean build:tsc",
+    "build:clean": "rimraf dist/*",
+    "build:tsc": "tsc",
+    "debug:start": "npm-run-all build debug:start:prod",
+    "debug:start:prod": "node --nolazy --inspect-brk=9229 ./dist/app.js"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mistysya/discord-app-pitch-2024/issues"
+  },
+  "dependencies": {
+    "@colyseus/auth": "^0.15.8",
+    "@colyseus/core": "^0.15.0",
+    "@colyseus/monitor": "^0.15.0",
+    "@colyseus/redis-driver": "^0.15.0",
+    "@colyseus/redis-presence": "^0.15.0",
+    "@colyseus/tools": "^0.15.0",
+    "@colyseus/ws-transport": "^0.15.1",
+    "@colyseus/schema": "^2.0.29",
+    "colyseus": "^0.15.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "cross-fetch": "^3.1.5",
+    "dotenv": "^16.0.1",
+    "http-proxy-middleware": "^2.0.6",
+    "nodemon": "^3.1.0"
+  },
+  "devDependencies": {
+    "@colyseus/loadtest": "^0.15.0",
+    "@colyseus/playground": "^0.15.0",
+    "@colyseus/testing": "^0.15.0",
+    "@types/cors": "^2.8.6",
+    "@types/mocha": "^8.2.3",
+    "copyfiles": "^2.4.1",
+    "npm-run-all": "^4.1.5"
+  }
+}

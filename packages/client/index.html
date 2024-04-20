@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discord Embedded App Starter</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">Clean-or-Covet</div>
+      </div>
+    </div>
+    <script>
+      let resp = fetch("test123/api")
+      console.log("Got resp 1:",resp);
+      resp = fetch("https://1219647680309886986.discordsays.com/test123/api")
+      console.log("Got resp 2:",resp);
+      resp = fetch("http://1219647680309886986.discordsays.com/test123/api")
+      console.log("Got resp 22:",resp);
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/unityBuild.js"></script>
+    <script>
+      console.log("Got in HTML:",window.DebugVariable);
+      let respp = fetch("test123/api")
+      console.log("Got resp 3:",respp);
+      respp = fetch("/test123/api")
+      console.log("Got resp 4:",respp);
+      setTimeout(function() {
+        console.log("Got in HTML 5 sec:",window.DebugVariable);
+        let channelName = GetChannelName();
+        let channelId = GetChannelId();
+        let userName = GetUserName();
+        let userId = GetUserId();
+        console.log("Got in HTML:",channelName);
+        console.log("Got in HTML:",channelId);
+        console.log("Got in HTML:",userName);
+        console.log("Got in HTML:",userId);
+        var appp = document.getElementById("app");
+        const textTag = document.createElement('p');
+        textTag.textContent = "Channel Name: " + channelName + " Channel Id: " + channelId + " User Name: " + userName + " User Id: " + userId;
+        appp.appendChild(textTag);
+      }, 10000);
+    </script>
+  </body>
+</html>
