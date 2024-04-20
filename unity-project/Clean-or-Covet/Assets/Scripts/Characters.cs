@@ -1,3 +1,12 @@
+/************************************************************
+ * PlayerController.cs
+ * This script is responsible for controlling the player's movement.
+ * The player can move using the arrow keys or WASD keys.
+ * (Disabled)The player can also boost by pressing the space key.
+ * The player's position is sent to the server every second.
+ * By pressing the R key, the player can toggle random movement.
+ ************************************************************/
+
 using System.Timers;
 using UnityEngine;
 
@@ -5,16 +14,19 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D rb;
     public float acceleration = 10f;
-    public float maxSpeed = 10f;
-    public float linearDrag = 5f;
-    public float boost = 0f;
+    public float maxSpeed = 90f;
+    public float linearDrag = 10f;
+    public ParticleSystem particle;
+
+    // public float boost = 0f;
     private Vector2 movement;
     private ConnectionManager _connectionManager;
     private Vector2 _targetPosition;
     private Vector2 _previousPosition;
     private float elapsed = 0f;
-    private bool _randomizeMovement = true;
+    private bool _randomizeMovement = false;
     private float _randomizeElapsed = 0f;
+
 
     public void Start()
     {
@@ -50,11 +62,11 @@ public class PlayerController : MonoBehaviour
         {
             _randomizeElapsed = 0f;
         }
-        // If space is pressed, boost
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.AddForce(movement.normalized * acceleration * boost);
-        }
+        // // If space is pressed, boost
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     rb.AddForce(movement.normalized * acceleration * boost);
+        // }
         // Send the player's position to the server when the player moves or every second
         if (_previousPosition != rb.position || elapsed >= 1f)
         {
@@ -62,6 +74,14 @@ public class PlayerController : MonoBehaviour
             _previousPosition = rb.position;
             _connectionManager.PlayerPosition(rb.position);
         }
+
+        // Debug.Log(Input.GetKey(KeyCode.Space));
+        if( Input.GetKey(KeyCode.Space) ) particle.Play();
+        else if( Input.GetKeyUp(KeyCode.Space) ) particle.Stop();
+        // else particle.Stop();
+        // if( Input.GetMouseButtonDown(0) ) particle.Play();
+        // else if( Input.GetMouseButtonUp(0) ) particle.Stop();
+
     }
 
     void FixedUpdate()
@@ -81,5 +101,11 @@ public class PlayerController : MonoBehaviour
         {
             rb.drag = 0;
         }
+        particle.transform.position = rb.position;
+        // particle.transform.rotation = 
+        
+        particle.transform.rotation = Quaternion.AngleAxis( 90, Vector3.right)  * Quaternion.AngleAxis( 90 + Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg, Vector3.up);
+        // Quaternion.Euler( 90, Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg, 0);
+        // , 0);
     }
 }
