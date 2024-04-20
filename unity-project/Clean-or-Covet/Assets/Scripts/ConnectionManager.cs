@@ -15,7 +15,12 @@ public class ConnectionManager : MonoBehaviour
     private string channelName = "";
     private static ColyseusClient _client = null;
     private static ColyseusRoom<GameRoomState> _room = null;
-    private const string HostAddress = "ws://localhost:13001";
+    private const string protocol = "wss://";
+    // TODO: Get the client ID from the env.
+    private const string clientId = "1219647680309886986.";
+    private const string proxyDomain = "discordsays.com";
+    private const string serverPrefix = "/colyseus";
+    private const string HostAddress = protocol + clientId + proxyDomain + serverPrefix;
     private const string GameName = "game";
 
 #if UNITY_WEBGL && !UNITY_EDITOR
